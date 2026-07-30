@@ -7,6 +7,8 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.cara.app.data.session.UserSession
+import com.cara.app.ui.screens.auth.LoginScreen
 import com.cara.app.ui.screens.details.PlaceDetailsScreen
 import com.cara.app.ui.screens.home.HomeScreen
 import com.cara.app.ui.screens.profile.ProfileScreen
@@ -19,9 +21,18 @@ fun CaraNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = CaraDestination.Home.route,
+        startDestination = if (UserSession.isLoggedIn) CaraDestination.Home.route else CaraDestination.Login.route,
         modifier = modifier,
     ) {
+        composable(CaraDestination.Login.route) {
+            LoginScreen(
+                onAuthSuccess = {
+                    navController.navigate(CaraDestination.Home.route) {
+                        popUpTo(CaraDestination.Login.route) { inclusive = true }
+                    }
+                },
+            )
+        }
         composable(CaraDestination.Home.route) {
             HomeScreen(
                 onPlaceClick = { placeId ->
@@ -37,7 +48,14 @@ fun CaraNavHost(
             )
         }
         composable(CaraDestination.Profile.route) {
-            ProfileScreen()
+            ProfileScreen(
+                onLogout = {
+                    UserSession.logout()
+                    navController.navigate(CaraDestination.Login.route) {
+                        popUpTo(0)
+                    }
+                },
+            )
         }
         composable(
             route = CaraDestination.PlaceDetails.route,

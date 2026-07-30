@@ -10,9 +10,13 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 // Mirrors the "API Endpoints (initial scope)" list in the backend's CLAUDE.md.
-// Auth endpoints aren't included yet — they're not in this app's initial
-// screen set (see CLAUDE_android.md Screens section).
 interface ApiService {
+
+    @POST("auth/register")
+    suspend fun register(@Body body: RegisterRequest): Response<UserDto>
+
+    @POST("auth/login")
+    suspend fun login(@Body body: LoginRequest): Response<UserDto>
 
     @GET("recommendations")
     suspend fun getRecommendations(

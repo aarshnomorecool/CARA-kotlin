@@ -1,5 +1,6 @@
 package com.cara.app.ui.screens.profile
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,10 +19,12 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Place
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
@@ -69,7 +72,7 @@ private sealed interface ProfileUiState {
 }
 
 @Composable
-fun ProfileScreen(modifier: Modifier = Modifier) {
+fun ProfileScreen(onLogout: () -> Unit, modifier: Modifier = Modifier) {
     var uiState by remember { mutableStateOf<ProfileUiState>(ProfileUiState.Loading) }
 
     LaunchedEffect(Unit) {
@@ -115,6 +118,8 @@ fun ProfileScreen(modifier: Modifier = Modifier) {
                     LocationsCard(state.user)
                     Spacer(Modifier.height(20.dp))
                     PreferencesCard(state.preferences)
+                    Spacer(Modifier.height(20.dp))
+                    LogoutButton(onLogout)
                     Spacer(Modifier.height(20.dp))
                 }
             }
@@ -262,6 +267,18 @@ private fun PreferenceBar(category: String, weight: Double, isLearned: Boolean) 
             trackColor = InkRaised,
             modifier = Modifier.fillMaxWidth().padding(vertical = 2.dp),
         )
+    }
+}
+
+@Composable
+private fun LogoutButton(onLogout: () -> Unit) {
+    OutlinedButton(
+        onClick = onLogout,
+        border = BorderStroke(1.dp, WarmGrey),
+        colors = ButtonDefaults.outlinedButtonColors(contentColor = WarmWhite),
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Text("Log out")
     }
 }
 

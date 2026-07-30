@@ -66,6 +66,17 @@ data class LocationUpdateRequest(
     val lon: Double,
 )
 
+data class RegisterRequest(
+    val name: String,
+    val email: String,
+    val password: String,
+)
+
+data class LoginRequest(
+    val email: String,
+    val password: String,
+)
+
 data class UserDto(
     @SerializedName("user_id") val userId: Int,
     val name: String,
