@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Mirrors ink base / citrus from the design system.
+         Only used for the adaptive launcher icon; all other
+         UI theme colors live in ui/theme/Color.kt since the
+         app is Compose-only. -->
+    <color name="ic_launcher_background">#14120F</color>
+    <color name="ic_launcher_foreground">#E8641C</color>
+</resources>

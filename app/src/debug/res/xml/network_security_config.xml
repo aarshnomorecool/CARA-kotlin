@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Debug builds only (this file lives under src/debug/, merged only into
+    debug variants - release keeps the default cleartext-blocked policy).
+    Allows plain HTTP to the local dev backend regardless of whether it's
+    reached via the emulator's 10.0.2.2 alias, `adb reverse` to localhost,
+    or the host machine's LAN IP - no real security exposure since this
+    never ships.
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true" />
+</network-security-config>

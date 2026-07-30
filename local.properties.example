@@ -1,0 +1,5 @@
+# Copy this file to local.properties (gitignored, never commit it).
+# Android Studio will add/overwrite sdk.dir itself on first sync — you don't
+# need to set that by hand.
+
+MAPS_API_KEY=your_google_maps_sdk_key_here
