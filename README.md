@@ -17,40 +17,36 @@ API contract this app implements.
 - Room for offline recommendation caching
 - Navigation Compose
 - Coil for image loading
-- Google Maps SDK (dependency present, not yet wired into any screen)
+- Google Maps SDK + maps-compose for map pins
 
 ## Current progress
 
+- [x] **Login / Register** — email+password, backed by the backend's existing
+      bcrypt auth endpoints, session persisted locally (survives app restart),
+      gates navigation so Home/Saved/Profile are unreachable while logged out
 - [x] **Home** — Context Strip (live weather/time/location/mood), category
       quick-filter tiles, a swipeable top-3 spotlight carousel, and curated rows
       (best match / low crowd / matches taste / fits budget), all from one
       `/recommendations` call
 - [x] **Context Input** — mood text + budget bottom sheet
 - [x] **Place Details** — photo, rating/price, full XAI reason chips, bookmark
-      toggle. Resolves by `place_id` regardless of how the screen was reached
-      (Home, Saved, or a future deep link), not just from an in-memory cache
+      toggle, a map pin for the place's location. Resolves by `place_id`
+      regardless of how the screen was reached (Home, Saved, or a future deep
+      link), not just from an in-memory cache
 - [x] **Saved** — bookmarked places list
-- [x] **Profile** — user info, home/college locations (text only, no map yet),
-      per-category preference bars, dark/light theme toggle
-- [x] Backend deployed and live on Cloud Run — app talks to it over the public
-      internet, no longer tied to a shared dev WiFi network
+- [x] **Profile** — user info, home/college locations with map pins,
+      per-category preference bars, dark/light theme toggle, log out
+- [x] Backend deployed and live on Cloud Run, with working CI — every push to
+      the backend's `main` now auto-deploys
 - [x] Offline fallback via Room cache with a "showing saved results" banner
 
 ## In progress / next up
 
-- [ ] **Real authentication** — backend already has working `POST /auth/register` /
-      `POST /auth/login` (bcrypt-hashed, tokenless by design). Missing piece is
-      purely this app: a Login/Register screen, persisting the logged-in
-      `user_id` locally, and gating navigation so login comes before Home.
-      Currently `UserSession.userId` is hardcoded to `1`, one shared test user.
-- [ ] **Map pins** — Place Details and Profile's home/college locations are
-      plain lat/lon text right now. Google Maps SDK is the confirmed provider
-      (dependency + manifest entry already present) — needs an actual map
-      Composable added to both screens, and a real `MAPS_API_KEY` in
-      `local.properties` (currently unset — see `local.properties.example`).
-- [ ] **Fix backend CI** — the backend's Cloud Run auto-deploy trigger is
-      currently broken (see the backend repo's README/memory for why); backend
-      changes need a manual redeploy for now.
+- [ ] **Map pins need a real API key** — the map Composables are wired up on
+      Place Details and Profile, but `local.properties`' `MAPS_API_KEY` is
+      still unset. Needs a Maps SDK for Android key from Google Cloud Console,
+      restricted to this app's package name + debug SHA-1 (get the SHA-1 via
+      Android Studio's Gradle panel → app → Tasks → android → `signingReport`).
 
 ## Known gaps (not yet started)
 
