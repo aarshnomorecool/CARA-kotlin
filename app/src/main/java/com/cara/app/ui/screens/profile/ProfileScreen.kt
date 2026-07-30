@@ -40,6 +40,7 @@ import com.cara.app.data.remote.NetworkModule
 import com.cara.app.data.remote.PreferenceDto
 import com.cara.app.data.remote.UserDto
 import com.cara.app.data.session.UserSession
+import com.cara.app.ui.components.PlaceMapView
 import com.cara.app.ui.components.categoryIcon
 import com.cara.app.ui.theme.Citrus
 import com.cara.app.ui.theme.InkBase
@@ -174,25 +175,38 @@ private fun AppearanceCard() {
     }
 }
 
+private const val LOCATION_MAP_HEIGHT_DP = 120
+
 @Composable
 private fun LocationsCard(user: UserDto) {
     Surface(color = InkSurface, shape = RoundedCornerShape(16.dp), modifier = Modifier.fillMaxWidth()) {
         Column(Modifier.padding(16.dp)) {
-            LocationRow(Icons.Filled.Home, "Home", formatLocation(user.homeLat, user.homeLon))
+            LocationRow(Icons.Filled.Home, "Home", user.homeLat, user.homeLon)
             Spacer(Modifier.height(14.dp))
-            LocationRow(Icons.Filled.Place, "College", formatLocation(user.collegeLat, user.collegeLon))
+            LocationRow(Icons.Filled.Place, "College", user.collegeLat, user.collegeLon)
         }
     }
 }
 
 @Composable
-private fun LocationRow(icon: ImageVector, label: String, value: String) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        Icon(icon, contentDescription = null, tint = Citrus, modifier = Modifier.size(20.dp))
-        Spacer(Modifier.width(10.dp))
-        Column {
-            Text(label, style = MaterialTheme.typography.labelMedium, color = WarmGrey)
-            Text(value, style = MaterialTheme.typography.bodyMedium, color = WarmWhite)
+private fun LocationRow(icon: ImageVector, label: String, lat: Double?, lon: Double?) {
+    Column {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(icon, contentDescription = null, tint = Citrus, modifier = Modifier.size(20.dp))
+            Spacer(Modifier.width(10.dp))
+            Column {
+                Text(label, style = MaterialTheme.typography.labelMedium, color = WarmGrey)
+                Text(formatLocation(lat, lon), style = MaterialTheme.typography.bodyMedium, color = WarmWhite)
+            }
+        }
+        if (lat != null && lon != null) {
+            Spacer(Modifier.height(8.dp))
+            PlaceMapView(
+                latitude = lat,
+                longitude = lon,
+                label = label,
+                modifier = Modifier.fillMaxWidth().height(LOCATION_MAP_HEIGHT_DP.dp),
+            )
         }
     }
 }

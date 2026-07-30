@@ -38,6 +38,7 @@ import com.cara.app.data.cache.RecommendationCache
 import com.cara.app.data.remote.InteractionRequest
 import com.cara.app.data.remote.NetworkModule
 import com.cara.app.data.session.UserSession
+import com.cara.app.ui.components.PlaceMapView
 import com.cara.app.ui.components.PlacePhoto
 import com.cara.app.ui.components.ReasonChip
 import com.cara.app.ui.theme.Citrus
@@ -47,10 +48,11 @@ import com.cara.app.ui.theme.WarmWhite
 import kotlinx.coroutines.launch
 
 private const val PHOTO_HEIGHT_DP = 240
+private const val MAP_HEIGHT_DP = 160
 
-// No map pin yet - deferred until the Google Maps vs Mapbox decision is
-// settled (see project memory); everything else per CLAUDE_android.md's
-// Place Details screen spec.
+// Map provider: Google Maps SDK (confirmed 2026-07-30, see project memory -
+// the plumbing for this - play-services-maps dependency, MAPS_API_KEY
+// manifest placeholder - already existed unused since the app was scaffolded).
 
 // Core place data always available regardless of how this screen was
 // reached; reason/reasonTags are null/empty unless this place came from
@@ -63,6 +65,8 @@ private data class PlaceDetailsModel(
     val name: String,
     val category: String,
     val area: String?,
+    val latitude: Double,
+    val longitude: Double,
     val approxRating: Double?,
     val priceRange: String?,
     val avgPriceInr: Double?,
@@ -100,6 +104,8 @@ fun PlaceDetailsScreen(
                 name = cached.name,
                 category = cached.category,
                 area = cached.area,
+                latitude = cached.latitude,
+                longitude = cached.longitude,
                 approxRating = cached.approxRating,
                 priceRange = cached.priceRange,
                 avgPriceInr = cached.avgPriceInr,
@@ -116,6 +122,8 @@ fun PlaceDetailsScreen(
                         name = body.name,
                         category = body.category,
                         area = body.area,
+                        latitude = body.latitude,
+                        longitude = body.longitude,
                         approxRating = body.approxRating,
                         priceRange = body.priceRange,
                         avgPriceInr = body.avgPriceInr,
@@ -253,6 +261,14 @@ fun PlaceDetailsScreen(
                             Text("($it)", style = MaterialTheme.typography.bodyMedium, color = WarmGrey)
                         }
                     }
+
+                    Spacer(Modifier.height(16.dp))
+                    PlaceMapView(
+                        latitude = place.latitude,
+                        longitude = place.longitude,
+                        label = place.name,
+                        modifier = Modifier.fillMaxWidth().height(MAP_HEIGHT_DP.dp),
+                    )
 
                     // Only present when this place came from a live
                     // /recommendations result (see PlaceDetailsModel's reason

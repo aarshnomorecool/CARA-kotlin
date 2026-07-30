@@ -112,6 +112,7 @@ dependencies {
 
     // Maps
     implementation("com.google.android.gms:play-services-maps:19.0.0")
+    implementation("com.google.maps.android:maps-compose:8.4.0")
 
     // Device location (Home screen context)
     implementation("com.google.android.gms:play-services-location:21.3.0")

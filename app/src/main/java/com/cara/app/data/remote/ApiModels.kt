@@ -102,6 +102,8 @@ data class PlaceDetailDto(
     val name: String,
     val category: String,
     val area: String?,
+    val latitude: Double,
+    val longitude: Double,
     @SerializedName("approx_rating") val approxRating: Double?,
     @SerializedName("price_range") val priceRange: String?,
     @SerializedName("avg_price_inr") val avgPriceInr: Double?,
