@@ -112,7 +112,14 @@ dependencies {
 
     // Maps
     implementation("com.google.android.gms:play-services-maps:19.0.0")
-    implementation("com.google.maps.android:maps-compose:8.4.0")
+    // Pinned to the version current around when this project's other deps
+    // were pinned (compose-bom 2024.06.00, compileSdk 34, AGP 8.5.0) -
+    // maps-compose's LATEST release (tried first, 8.4.0) transitively pulls
+    // in Compose/AndroidX artifacts from mid-2026 that require compileSdk
+    // 35-37 and AGP 8.6-9.1, way past what the rest of this project uses -
+    // 36 AAR metadata errors on sync. Don't bump this without also bumping
+    // compileSdk/AGP/the compose BOM together, deliberately, project-wide.
+    implementation("com.google.maps.android:maps-compose:4.4.2")
 
     // Device location (Home screen context)
     implementation("com.google.android.gms:play-services-location:21.3.0")
